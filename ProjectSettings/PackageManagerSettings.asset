@@ -34,6 +34,7 @@ MonoBehaviour:
     m_Name: OpenUPM
     m_Url: https://package.openupm.com
     m_Scopes:
+    - com.dbrizov.naughtyattributes
     - com.demigiant.dotween
     - jp.hadashikick.vcontainer
     - com.cysharp.r3
