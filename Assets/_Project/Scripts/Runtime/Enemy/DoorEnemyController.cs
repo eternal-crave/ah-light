@@ -6,8 +6,9 @@ namespace Runtime.Enemy
 {
     public class DoorEnemyController : EnemyControllerBase
     {
-        [Header("Patrol Points")]
-        [SerializeField] private Transform doorPoint;
+        [Header("Patrol Points")] [SerializeField]
+        private Transform doorPoint;
+
         [SerializeField] private Transform corridorPoint;
         [SerializeField] private Transform wallPoint;
 
@@ -34,10 +35,21 @@ namespace Runtime.Enemy
             _stunnedState = new StunnedState(this);
         }
 
-        protected override void Start()
+        public override void ResetForPool()
         {
-            base.Start();
-            TransitionToPatrol();
+            base.ResetForPool();
+
+            // States are kept, just reset current state
+            _currentState = null;
+        }
+
+        public void InitializeFromPool()
+        {
+            // Ensure states are created
+            if (_patrolState == null)
+            {
+                CreateStates();
+            }
         }
 
         public void TransitionToChase()
@@ -59,6 +71,8 @@ namespace Runtime.Enemy
         {
             Disappear(DisappearReason.PatrolComplete);
         }
+
+
     }
 }
 

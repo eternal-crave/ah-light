@@ -27,12 +27,12 @@ namespace Runtime.Gameplay
 
         private Quaternion _closedRotation;
         private bool _isOpen;
-        private EnemyFactory _enemyFactory;
+        private EnemyPool _enemyPool;
 
         [Inject]
-        private void Construct(EnemyFactory enemyFactory)
+        private void Construct(EnemyPool enemyPool)
         {
-            _enemyFactory = enemyFactory;
+            _enemyPool = enemyPool;
         }
 
         private void Awake()
@@ -63,7 +63,7 @@ namespace Runtime.Gameplay
 
         private void OnDoorOpened()
         {
-            if (spawnEnemyOnOpen && _enemyFactory != null)
+            if (spawnEnemyOnOpen && _enemyPool != null)
             {
                 SpawnEnemy();
             }
@@ -77,10 +77,9 @@ namespace Runtime.Gameplay
                 return;
             }
 
-            var enemy = _enemyFactory.Create(doorPoint.position, doorPoint.rotation) as DoorEnemyController;
+            var enemy = _enemyPool.Get(doorPoint.position, doorPoint.rotation) as DoorEnemyController;
             if (enemy != null)
             {
-                enemy.SetInitialRotation(doorPoint.rotation);                
                 enemy.SetPatrolPoints(doorPoint, corridorPoint, wallPoint);
             }
         }

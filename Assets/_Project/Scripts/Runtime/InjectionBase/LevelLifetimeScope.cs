@@ -22,6 +22,9 @@ namespace Runtime.InjectionBase
             // Factories
             builder.Register<EnemyFactory>(Lifetime.Singleton)
                 .WithParameter(enemyPrefab);
+
+            // Pools
+            builder.Register<EnemyPool>(Lifetime.Singleton).As<IEnemyPool>(); 
         }
     }
 }

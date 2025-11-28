@@ -27,6 +27,9 @@ namespace Runtime.Enemy
         protected bool _isInTorchZone;
         protected float _torchHoldTime;
 
+        protected bool _statesCreated = false;
+        protected IEnemyPool _pool;
+
         public NavMeshAgent Agent => _agent;
         public Transform Transform => transform;
         public Transform Player => _player?.transform;
@@ -36,12 +39,18 @@ namespace Runtime.Enemy
         public float TorchHoldTime => _torchHoldTime;
         public float TorchStunDuration => torchStunDuration;
 
+        #region CONSTRUCTORS
+
         [Inject]
         protected void Construct(PlayerBehaviour player, IMessageHub messageHub)
         {
             _player = player;
             _messageHub = messageHub;
         }
+
+        #endregion
+
+        #region MONO
 
         protected virtual void Awake()
         {
@@ -50,7 +59,12 @@ namespace Runtime.Enemy
 
         protected virtual void Start()
         {
-            CreateStates();
+            // Only create states if not already created (for pooled objects)
+            if (!_statesCreated)
+            {
+                _statesCreated = true;
+                CreateStates();
+            }
         }
 
         //could use R3 but it will be overkill i guess
@@ -59,14 +73,7 @@ namespace Runtime.Enemy
             _currentState?.Execute();
         }
 
-        protected abstract void CreateStates();
-
-        protected void ChangeState(IEnemyState newState)
-        {
-            _currentState?.Exit();
-            _currentState = newState;
-            _currentState?.Enter();
-        }
+        #endregion
 
         public void SetTorchZone(bool inZone)
         {
@@ -114,7 +121,8 @@ namespace Runtime.Enemy
         {
             Debug.Log($"[Enemy] Enemy disappeared! Reason: {reason}");
             _messageHub.Publish(new EnemyDisappearedEvent(this, reason));
-            gameObject.SetActive(false);
+            
+            ReturnToPool();
         }
 
         public void TeleportToPlayer()
@@ -139,6 +147,50 @@ namespace Runtime.Enemy
         public void SetInitialPosition(Vector3 position)
         {
             _agent.Warp(position);
+        }
+
+        public virtual void ResetForPool()
+        {
+            // Reset state when taken from pool
+            _isInTorchZone = false;
+            _torchHoldTime = 0f;
+            
+            // Reset NavMeshAgent
+            _agent.ResetPath();
+            _agent.isStopped = false;
+            _agent.updateRotation = true;
+        }
+
+        public virtual void CleanupForPool()
+        {
+            // Cleanup when returned to pool
+            _currentState?.Exit();
+            _currentState = null;
+            
+            // Reset NavMeshAgent
+            _agent.ResetPath();
+            _agent.isStopped = true;
+        }
+        
+        protected abstract void CreateStates();
+
+        protected void ChangeState(IEnemyState newState)
+        {
+            _currentState?.Exit();
+            _currentState = newState;
+            _currentState?.Enter();
+        }
+
+        private void ReturnToPool()
+        {
+            gameObject.SetActive(false);
+
+            _pool?.Return(this);
+        }
+
+        public void SetPool(IEnemyPool pool)
+        {
+            _pool = pool;
         }
 
         protected virtual void OnDrawGizmosSelected()
