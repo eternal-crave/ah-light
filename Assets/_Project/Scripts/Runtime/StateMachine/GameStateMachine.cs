@@ -59,7 +59,7 @@ namespace Core.StateMachine
         /// <summary>
         /// Gets a specific state by type.
         /// </summary>
-        private TState GetState<TState>() where TState : class, IState
+        public TState GetState<TState>() where TState : class, IState
         {
             var stateType = typeof(TState);
 

@@ -1,3 +1,4 @@
+using Runtime.Gameplay;
 using UnityEngine;
 
 namespace Core.StateMachine.States
@@ -8,20 +9,33 @@ namespace Core.StateMachine.States
     /// </summary>
     public class GameplayState : BaseState
     {
+        private LevelController _levelController;
+
+        public void SetLevelController(LevelController levelController)
+        {
+            _levelController = levelController;
+        }
+
+        /// <summary>
+        /// Called when entering gameplay state.
+        /// GameplayState controls when level initializes.
+        /// </summary>
         public override void Enter(object payload = default)
         {
             Debug.Log("[GameplayState] Gameplay started.");
 
-            // Initialize gameplay systems here
-            // (e.g., spawn player, start game timer, enable input, etc.)
+            _levelController?.Init();
         }
 
+        /// <summary>
+        /// Called when exiting gameplay state.
+        /// Use for: cleanup, saving progress, despawning entities,
+        /// stopping systems, disabling input, etc.
+        /// </summary>
         public override void Exit()
         {
             Debug.Log("[GameplayState] Gameplay ended.");
-
-            // Cleanup gameplay systems here
-            // (e.g., despawn entities, save state, etc.)
+            _levelController = null;
         }
     }
 }
