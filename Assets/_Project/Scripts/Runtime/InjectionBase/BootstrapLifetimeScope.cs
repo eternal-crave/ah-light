@@ -1,6 +1,7 @@
 using Core.Gameplay;
 using Core.StateMachine;
 using Core.StateMachine.States;
+using Easy.MessageHub;
 using Runtime.Player;
 using Runtime.Services;
 using UnityEngine;
@@ -24,8 +25,6 @@ namespace Runtime.InjectionBase
         {
             SetupStateMachine(builder);
             RegisterServices(builder);
-            
-            
 
             // Register EntryPoint for Bootstrap initialization
             builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(gameplaySceneIndex);
@@ -37,6 +36,9 @@ namespace Runtime.InjectionBase
         private void RegisterServices(IContainerBuilder builder)
         {
             builder.RegisterInstance(inputService).As<IInputService>().AsSelf();
+            
+            // Message Hub (Event Bus)
+            builder.Register<MessageHub>(Lifetime.Singleton).As<IMessageHub>();
         }
 
         private void SetupStateMachine(IContainerBuilder builder)
