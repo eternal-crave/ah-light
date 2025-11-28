@@ -35,7 +35,6 @@ MonoBehaviour:
     m_Url: https://package.openupm.com
     m_Scopes:
     - com.dbrizov.naughtyattributes
-    - com.demigiant.dotween
     - jp.hadashikick.vcontainer
     - com.cysharp.r3
     m_IsDefault: 0
@@ -49,6 +48,6 @@ MonoBehaviour:
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -876
-    m_OriginalInstanceId: -880
+    m_UserModificationsInstanceId: -874
+    m_OriginalInstanceId: -878
   m_LoadAssets: 0
