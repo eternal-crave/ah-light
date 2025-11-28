@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Runtime.Services
@@ -6,8 +7,11 @@ namespace Runtime.Services
     {
         Vector2 MoveInput { get; }
         Vector2 LookInput { get; }
+        
         bool IsSprintPressed { get; }
         bool IsJumpPressed { get; }
+        
+        event Action OnTorchPressed;
     }
 }
 

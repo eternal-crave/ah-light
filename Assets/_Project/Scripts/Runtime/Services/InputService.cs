@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,11 +13,14 @@ namespace Runtime.Services
         private InputAction _lookAction;
         private InputAction _sprintAction;
         private InputAction _jumpAction;
+        private InputAction _torchAction;
 
         public Vector2 MoveInput { get; private set; }
         public Vector2 LookInput { get; private set; }
         public bool IsSprintPressed { get; private set; }
         public bool IsJumpPressed { get; private set; }
+        
+        public event Action OnTorchPressed;
 
         private void Awake()
         {
@@ -26,6 +30,7 @@ namespace Runtime.Services
             _lookAction = actionMap.FindAction("Look");
             _sprintAction = actionMap.FindAction("Sprint");
             _jumpAction = actionMap.FindAction("Jump");
+            _torchAction = actionMap.FindAction("Torch");
 
             RegisterInputActions();
         }
@@ -43,6 +48,8 @@ namespace Runtime.Services
 
             _jumpAction.performed += _ => IsJumpPressed = true;
             _jumpAction.canceled += _ => IsJumpPressed = false;
+
+            _torchAction.performed += _ => OnTorchPressed?.Invoke();
         }
 
         private void OnEnable()
@@ -51,6 +58,7 @@ namespace Runtime.Services
             _lookAction.Enable();
             _sprintAction.Enable();
             _jumpAction.Enable();
+            _torchAction.Enable();
         }
 
         private void OnDisable()
@@ -59,6 +67,7 @@ namespace Runtime.Services
             _lookAction.Disable();
             _sprintAction.Disable();
             _jumpAction.Disable();
+            _torchAction.Disable();
         }
     }
 }
