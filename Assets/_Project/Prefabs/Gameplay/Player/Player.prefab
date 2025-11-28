@@ -255,7 +255,7 @@ Transform:
   m_GameObject: {fileID: 7428890444937635119}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.32000002, y: -0.55, z: 1.2}
+  m_LocalPosition: {x: 0, y: 0.1, z: 1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -368,3 +368,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Player.Torch
   torchLight: {fileID: 6208674348598368219}
+  detectionRange: 15
+  detectionAngle: 30
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0

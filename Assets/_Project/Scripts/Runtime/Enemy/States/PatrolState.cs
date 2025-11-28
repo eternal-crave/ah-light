@@ -28,7 +28,9 @@ namespace Runtime.Enemy.States
             _phase = PatrolPhase.WalkFromDoor;
             _waitTimer = 0f;
 
-            // Move to corridor first
+            if (_enemy.DoorPoint != null)
+                _enemy.SetInitialPosition(_enemy.DoorPoint.position);
+
             if (_enemy.CorridorPoint != null)
                 _enemy.Agent.SetDestination(_enemy.CorridorPoint.position);
         }

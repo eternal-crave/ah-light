@@ -126,6 +126,21 @@ namespace Runtime.Enemy
             transform.LookAt(_player.transform);
         }
 
+        public void SetInitialRotation(Quaternion rotation)
+        {
+            bool wasUpdatingRotation = _agent.updateRotation;
+            _agent.updateRotation = false;
+            
+            transform.rotation = rotation;
+            
+            _agent.updateRotation = wasUpdatingRotation;
+        }
+
+        public void SetInitialPosition(Vector3 position)
+        {
+            _agent.Warp(position);
+        }
+
         protected virtual void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.yellow;

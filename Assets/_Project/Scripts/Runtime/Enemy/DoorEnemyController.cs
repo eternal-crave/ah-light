@@ -20,6 +20,13 @@ namespace Runtime.Enemy
         public Transform CorridorPoint => corridorPoint;
         public Transform WallPoint => wallPoint;
 
+        public void SetPatrolPoints(Transform door, Transform corridor, Transform wall)
+        {
+            doorPoint = door;
+            corridorPoint = corridor;
+            wallPoint = wall;
+        }
+
         protected override void CreateStates()
         {
             _patrolState = new PatrolState(this);
