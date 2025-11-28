@@ -1,5 +1,4 @@
 using Runtime.Gameplay;
-using Runtime.LevelInitializers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -15,9 +14,6 @@ namespace Runtime.InjectionBase
         {
             // Controllers
             builder.RegisterComponent(levelController);
-
-            // Entry Point - auto-calls LevelController.Init()
-            builder.RegisterEntryPoint<LevelEntryPoint>();
         }
     }
 }

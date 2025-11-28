@@ -1,3 +1,5 @@
+using Core.StateMachine;
+using Core.StateMachine.States;
 using Runtime.Player;
 using UnityEngine;
 using VContainer;
@@ -16,6 +18,7 @@ namespace Runtime.Gameplay
         #region PRIVATE_VARIABLES
 
         private PlayerBehaviour _playerController;
+        private GameStateMachine _stateMachine;
 
         #endregion
 
@@ -28,15 +31,26 @@ namespace Runtime.Gameplay
         #region CONSTRUCTORS
 
         [Inject]
-        private void Construct(PlayerBehaviour playerController)
+        private void Construct(PlayerBehaviour playerController, GameStateMachine stateMachine)
         {
             _playerController = playerController;
+            _stateMachine = stateMachine;
+        }
+
+        #endregion
+
+        #region MONO
+
+        private void Start()
+        {
+            var gameplayState = _stateMachine.GetState<GameplayState>();
+            gameplayState.SetLevelController(this);
         }
 
         #endregion
 
         #region PUBLIC_FUNCTIONS
-        
+
         public void Init()
         {
             SetupPlayer();
