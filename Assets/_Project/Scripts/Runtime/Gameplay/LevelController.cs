@@ -35,14 +35,8 @@ namespace Runtime.Gameplay
         {
             _playerController = playerController;
             _stateMachine = stateMachine;
-        }
 
-        #endregion
-
-        #region MONO
-
-        private void Start()
-        {
+            // Register immediately - guaranteed before GameplayState.Enter()
             var gameplayState = _stateMachine.GetState<GameplayState>();
             gameplayState.SetLevelController(this);
         }
