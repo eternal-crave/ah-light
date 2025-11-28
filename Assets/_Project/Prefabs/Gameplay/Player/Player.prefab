@@ -33,7 +33,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4000000000000000001}
-  - {fileID: 61169699283546569}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &136000000000000000
@@ -129,7 +128,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 61169699283546569}
   m_Father: {fileID: 4000000000000000000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &20000000000000000
@@ -255,11 +255,11 @@ Transform:
   m_GameObject: {fileID: 7428890444937635119}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.32000002, y: 0.048839986, z: 1.474}
+  m_LocalPosition: {x: 0.32000002, y: -0.55, z: 1.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4000000000000000000}
+  m_Father: {fileID: 4000000000000000001}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!108 &6208674348598368219
 Light:
@@ -271,14 +271,14 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 0
-  m_Color: {r: 1, g: 0.95, b: 0.8, a: 1}
+  m_Color: {r: 1, g: 0.90501297, b: 0.6273585, a: 1}
   m_Intensity: 2
   m_Range: 15
-  m_SpotAngle: 106.03306
-  m_InnerSpotAngle: 105.03306
+  m_SpotAngle: 97.15701
+  m_InnerSpotAngle: 47.338844
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
