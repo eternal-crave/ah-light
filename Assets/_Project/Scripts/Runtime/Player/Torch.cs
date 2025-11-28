@@ -6,17 +6,31 @@ namespace Runtime.Player
 {
     public class Torch : MonoBehaviour
     {
+        #region SERIALIZED_FIELDS
+
         [SerializeField] private Light torchLight;
         [SerializeField] private float detectionRange = 15f;
         [SerializeField] private float detectionAngle = 30f;
         [SerializeField] private LayerMask enemyLayer;
+
+        #endregion
+
+        #region PRIVATE_FIELDS
 
         private bool _isOn;
         private Transform _cameraTransform;
         private readonly HashSet<EnemyControllerBase> _trackedEnemies = new();
         private readonly List<EnemyControllerBase> _enemiesToRemove = new();
 
+        #endregion
+
+        #region PROPERTIES
+
         public bool IsOn => _isOn;
+
+        #endregion
+
+        #region MONO
 
         private void Start()
         {
@@ -31,6 +45,10 @@ namespace Runtime.Player
             UpdateEnemyDetection();
         }
 
+        #endregion
+
+        #region PUBLIC_METHODS
+
         public void Toggle()
         {
             _isOn = !_isOn;
@@ -38,7 +56,6 @@ namespace Runtime.Player
             if (torchLight != null)
                 torchLight.enabled = _isOn;
 
-            // If turned off, notify all tracked enemies they're not in torch zone
             if (!_isOn)
                 ClearAllEnemiesFromTorchZone();
         }
@@ -54,15 +71,17 @@ namespace Runtime.Player
                 ClearAllEnemiesFromTorchZone();
         }
 
+        #endregion
+
+        #region PRIVATE_METHODS
+
         private void UpdateEnemyDetection()
         {
-            // Clean up destroyed enemies
             CleanupDestroyedEnemies();
 
             if (!_isOn)
                 return;
 
-            // Find all enemies in range
             var colliders = Physics.OverlapSphere(transform.position, detectionRange, enemyLayer);
             var currentFrameEnemies = new HashSet<EnemyControllerBase>();
 
@@ -81,7 +100,6 @@ namespace Runtime.Player
                 }
             }
 
-            // Notify enemies that left the torch zone
             foreach (var enemy in _trackedEnemies)
             {
                 if (!currentFrameEnemies.Contains(enemy) && enemy != null && enemy.gameObject.activeInHierarchy)
@@ -130,6 +148,10 @@ namespace Runtime.Player
             return angle <= detectionAngle;
         }
 
+        #endregion
+
+        #region DEBUG
+
         private void OnDrawGizmosSelected()
         {
             if (_cameraTransform == null && Camera.main != null)
@@ -140,6 +162,7 @@ namespace Runtime.Player
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, detectionRange);
         }
+
+        #endregion
     }
 }
-

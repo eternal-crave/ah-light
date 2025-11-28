@@ -4,12 +4,22 @@ namespace Runtime.Enemy.States
 {
     public class ChaseState : IEnemyState
     {
+        #region PRIVATE_FIELDS
+
         private readonly DoorEnemyController _enemy;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         public ChaseState(DoorEnemyController enemy)
         {
             _enemy = enemy;
         }
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         public void Enter()
         {
@@ -19,7 +29,6 @@ namespace Runtime.Enemy.States
 
         public void Execute()
         {
-            // Check if player is using torch on enemy
             if (_enemy.IsInTorchZone)
             {
                 Debug.Log("[ChaseState] Hit by torch, transitioning to stunned.");
@@ -27,13 +36,11 @@ namespace Runtime.Enemy.States
                 return;
             }
 
-            // Chase player
             if (_enemy.Player != null)
             {
                 _enemy.Agent.SetDestination(_enemy.Player.position);
             }
 
-            // Kill if in range
             if (_enemy.IsInKillRange())
             {
                 _enemy.KillPlayer();
@@ -45,6 +52,8 @@ namespace Runtime.Enemy.States
             Debug.Log("[ChaseState] Stopping chase.");
             _enemy.Agent.ResetPath();
         }
+
+        #endregion
     }
 }
 

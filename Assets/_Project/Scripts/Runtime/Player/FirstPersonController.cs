@@ -7,6 +7,8 @@ namespace Runtime.Player
     [RequireComponent(typeof(CharacterController))]
     public class FirstPersonController : MonoBehaviour
     {
+        #region SERIALIZED_FIELDS
+
         [Header("Movement")]
         [SerializeField] private float walkSpeed = 4f;
         [SerializeField] private float sprintSpeed = 7f;
@@ -24,20 +26,30 @@ namespace Runtime.Player
         [SerializeField] private float groundedRadius = 0.28f;
         [SerializeField] private LayerMask groundLayers;
 
+        #endregion
+
+        #region PRIVATE_FIELDS
+
         private CharacterController _controller;
         private IInputService _inputService;
-
         private float _verticalVelocity;
         private float _cameraPitch;
         private bool _isGrounded;
-
         private const float Threshold = 0.01f;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         [Inject]
         private void Construct(IInputService inputService)
         {
             _inputService = inputService;
         }
+
+        #endregion
+
+        #region MONO
 
         private void Start()
         {
@@ -59,6 +71,10 @@ namespace Runtime.Player
         {
             HandleLook();
         }
+
+        #endregion
+
+        #region PRIVATE_METHODS
 
         private void GroundedCheck()
         {
@@ -102,16 +118,18 @@ namespace Runtime.Player
             if (look.sqrMagnitude < Threshold)
                 return;
 
-            // Horizontal rotation (yaw) - rotate the player
             transform.Rotate(Vector3.up * look.x * lookSensitivity);
 
-            // Vertical rotation (pitch) - rotate the camera
             _cameraPitch -= look.y * lookSensitivity;
             _cameraPitch = Mathf.Clamp(_cameraPitch, bottomClamp, topClamp);
 
             if (cameraTransform != null)
                 cameraTransform.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
         }
+
+        #endregion
+
+        #region DEBUG
 
         private void OnDrawGizmosSelected()
         {
@@ -121,6 +139,7 @@ namespace Runtime.Player
             Gizmos.color = _isGrounded ? transparentGreen : transparentRed;
             Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z), groundedRadius);
         }
+
+        #endregion
     }
 }
-

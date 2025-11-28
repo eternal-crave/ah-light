@@ -9,21 +9,26 @@ namespace Core.StateMachine.States
     /// </summary>
     public class BootstrapState : BaseState
     {
+        #region PRIVATE_FIELDS
+
         private readonly int _mainSceneIndex;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         public BootstrapState(int mainSceneIndex = 1)
         {
             _mainSceneIndex = mainSceneIndex;
         }
 
+        #endregion
+
+        #region PUBLIC_METHODS
+
         public override void Enter(object payload = default)
         {
             Debug.Log("[BootstrapState] Initializing game...");
-
-            // Perform any bootstrap initialization here
-            // (e.g., loading configs, initializing services, etc.)
-
-            // Transition to loading the main scene
             StateMachine.Enter<LoadingState>(_mainSceneIndex);
         }
 
@@ -31,5 +36,7 @@ namespace Core.StateMachine.States
         {
             Debug.Log("[BootstrapState] Exiting...");
         }
+
+        #endregion
     }
 }

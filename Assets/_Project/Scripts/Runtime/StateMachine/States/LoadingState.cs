@@ -10,6 +10,8 @@ namespace Core.StateMachine.States
     /// </summary>
     public class LoadingState : BaseState
     {
+        #region PUBLIC_METHODS
+
         public override void Enter(object payload = default)
         {
             Debug.Log($"[LoadingState] Loading scene: {payload}");
@@ -20,7 +22,6 @@ namespace Core.StateMachine.States
                 return;
             }
 
-            // Handle scene loading based on payload type
             if (payload is int sceneIndex)
             {
                 SceneLoader.Load(sceneIndex, LoadSceneMode.Additive, OnSceneLoaded);
@@ -40,10 +41,16 @@ namespace Core.StateMachine.States
             Debug.Log("[LoadingState] Scene loading complete.");
         }
 
+        #endregion
+
+        #region PRIVATE_METHODS
+
         private void OnSceneLoaded()
         {
             Debug.Log("[LoadingState] Scene loaded successfully. Transitioning to GameplayState.");
             StateMachine.Enter<GameplayState>();
         }
+
+        #endregion
     }
 }

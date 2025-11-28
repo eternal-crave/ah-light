@@ -8,18 +8,32 @@ namespace Core.Gameplay
 {
     public class BootstrapEntryPoint : IStartable
     {
+        #region PRIVATE_FIELDS
+
         private readonly GameStateMachine _stateMachine;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         public BootstrapEntryPoint(GameStateMachine stateMachine)
         {
             _stateMachine = stateMachine;
         }
 
+        #endregion
+
+        #region PUBLIC_METHODS
+
         public void Start()
         {
             Debug.Log("[BootstrapEntryPoint] Bootstrap scene initialized. Starting state machine...");
             _stateMachine.Enter<BootstrapState>();
         }
+
+        #endregion
+
+        #region EDITOR
 
 #if UNITY_EDITOR
         private const string BOOTSTRAP_SCENE_NAME = "Bootstrap";
@@ -33,5 +47,7 @@ namespace Core.Gameplay
             }
         }
 #endif
+
+        #endregion
     }
 }

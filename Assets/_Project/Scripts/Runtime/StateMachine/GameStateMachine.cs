@@ -11,8 +11,23 @@ namespace Core.StateMachine
     /// </summary>
     public class GameStateMachine
     {
+        #region PRIVATE_FIELDS
+
         private readonly Dictionary<Type, IState> _states = new();
         private IState _activeState;
+
+        #endregion
+
+        #region PROPERTIES
+
+        /// <summary>
+        /// Gets the currently active state.
+        /// </summary>
+        public IState ActiveState => _activeState;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         [Inject]
         public GameStateMachine(IEnumerable<IState> states)
@@ -26,6 +41,10 @@ namespace Core.StateMachine
             Debug.Log($"[GameStateMachine] Registered {_states.Count} states.");
         }
 
+        #endregion
+
+        #region PUBLIC_METHODS
+
         /// <summary>
         /// Transitions to a new state.
         /// </summary>
@@ -35,7 +54,6 @@ namespace Core.StateMachine
         {
             var stateType = typeof(TState);
 
-            // Exit current state
             if (_activeState != null)
             {
                 var exitingStateName = _activeState.GetType().Name;
@@ -43,18 +61,12 @@ namespace Core.StateMachine
                 Debug.Log($"[GameStateMachine] Exited state: {exitingStateName}");
             }
 
-            // Enter new state
             TState newState = GetState<TState>();
             _activeState = newState;
             newState.Enter(payload);
 
             Debug.Log($"[GameStateMachine] Entered state: {stateType.Name}");
         }
-
-        /// <summary>
-        /// Gets the currently active state.
-        /// </summary>
-        public IState ActiveState => _activeState;
 
         /// <summary>
         /// Gets a specific state by type.
@@ -70,5 +82,7 @@ namespace Core.StateMachine
 
             return state as TState;
         }
+
+        #endregion
     }
 }

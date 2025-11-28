@@ -11,6 +11,8 @@ namespace Runtime.Enemy
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class EnemyControllerBase : MonoBehaviour
     {
+        #region SERIALIZED_FIELDS
+
         [Header("Detection")]
         [SerializeField] protected float detectionRange = 10f;
         [SerializeField] protected float killRange = 1.5f;
@@ -18,17 +20,22 @@ namespace Runtime.Enemy
         [Header("Torch Settings")]
         [SerializeField] protected float torchStunDuration = 3f;
 
+        #endregion
+
+        #region PROTECTED_FIELDS
+
         protected NavMeshAgent _agent;
         protected IEnemyState _currentState;
         protected PlayerBehaviour _player;
         protected IMessageHub _messageHub;
-
-        // State
         protected bool _isInTorchZone;
         protected float _torchHoldTime;
-
         protected bool _statesCreated = false;
         protected IEnemyPool _pool;
+
+        #endregion
+
+        #region PROPERTIES
 
         public NavMeshAgent Agent => _agent;
         public Transform Transform => transform;
@@ -38,6 +45,8 @@ namespace Runtime.Enemy
         public bool IsInTorchZone => _isInTorchZone;
         public float TorchHoldTime => _torchHoldTime;
         public float TorchStunDuration => torchStunDuration;
+
+        #endregion
 
         #region CONSTRUCTORS
 
@@ -74,6 +83,8 @@ namespace Runtime.Enemy
         }
 
         #endregion
+
+        #region PUBLIC_METHODS
 
         public void SetTorchZone(bool inZone)
         {
@@ -151,11 +162,9 @@ namespace Runtime.Enemy
 
         public virtual void ResetForPool()
         {
-            // Reset state when taken from pool
             _isInTorchZone = false;
             _torchHoldTime = 0f;
             
-            // Reset NavMeshAgent
             _agent.ResetPath();
             _agent.isStopped = false;
             _agent.updateRotation = true;
@@ -163,15 +172,22 @@ namespace Runtime.Enemy
 
         public virtual void CleanupForPool()
         {
-            // Cleanup when returned to pool
             _currentState?.Exit();
             _currentState = null;
             
-            // Reset NavMeshAgent
             _agent.ResetPath();
             _agent.isStopped = true;
         }
-        
+
+        public void SetPool(IEnemyPool pool)
+        {
+            _pool = pool;
+        }
+
+        #endregion
+
+        #region PROTECTED_METHODS
+
         protected abstract void CreateStates();
 
         protected void ChangeState(IEnemyState newState)
@@ -181,17 +197,19 @@ namespace Runtime.Enemy
             _currentState?.Enter();
         }
 
+        #endregion
+
+        #region PRIVATE_METHODS
+
         private void ReturnToPool()
         {
             gameObject.SetActive(false);
-
             _pool?.Return(this);
         }
 
-        public void SetPool(IEnemyPool pool)
-        {
-            _pool = pool;
-        }
+        #endregion
+
+        #region DEBUG
 
         protected virtual void OnDrawGizmosSelected()
         {
@@ -201,6 +219,8 @@ namespace Runtime.Enemy
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, killRange);
         }
+
+        #endregion
     }
 }
 

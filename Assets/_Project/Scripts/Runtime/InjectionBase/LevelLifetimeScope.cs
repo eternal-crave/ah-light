@@ -8,23 +8,28 @@ namespace Runtime.InjectionBase
 {
     public class LevelLifetimeScope : LifetimeScope
     {
+        #region SERIALIZED_FIELDS
+
         [Header("Scene References")]
         [SerializeField] private LevelController levelController;
 
         [Header("Prefabs")]
         [SerializeField] private EnemyControllerBase enemyPrefab;
 
+        #endregion
+
+        #region PROTECTED_METHODS
+
         protected override void Configure(IContainerBuilder builder)
         {
-            // Controllers
             builder.RegisterComponent(levelController);
 
-            // Factories
             builder.Register<EnemyFactory>(Lifetime.Singleton)
                 .WithParameter(enemyPrefab);
 
-            // Pools
-            builder.Register<EnemyPool>(Lifetime.Singleton).As<IEnemyPool>(); 
+            builder.Register<EnemyPool>(Lifetime.Singleton).As<IEnemyPool>();
         }
+
+        #endregion
     }
 }

@@ -11,8 +11,14 @@ namespace Core.StateMachine.States
     /// </summary>
     public class GameplayState : BaseState
     {
+        #region PRIVATE_FIELDS
+
         private LevelController _levelController;
         private IDisposable _waitSubscription;
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         public void SetLevelController(LevelController levelController)
         {
@@ -40,6 +46,10 @@ namespace Core.StateMachine.States
             Debug.Log("[GameplayState] Gameplay ended.");
             Cleanup();
         }
+
+        #endregion
+
+        #region PRIVATE_METHODS
 
         private IDisposable WaitForLevelController(Action<LevelController> onReady)
         {
@@ -74,5 +84,7 @@ namespace Core.StateMachine.States
             _waitSubscription?.Dispose();
             _waitSubscription = null;
         }
+
+        #endregion
     }
 }

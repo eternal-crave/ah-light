@@ -6,27 +6,32 @@ namespace Runtime.Enemy
 {
     public class DoorEnemyController : EnemyControllerBase
     {
-        [Header("Patrol Points")] [SerializeField]
-        private Transform doorPoint;
+        #region SERIALIZED_FIELDS
 
+        [Header("Patrol Points")]
+        [SerializeField] private Transform doorPoint;
         [SerializeField] private Transform corridorPoint;
         [SerializeField] private Transform wallPoint;
 
-        // States
+        #endregion
+
+        #region PRIVATE_FIELDS
+
         private PatrolState _patrolState;
         private ChaseState _chaseState;
         private StunnedState _stunnedState;
+
+        #endregion
+
+        #region PROPERTIES
 
         public Transform DoorPoint => doorPoint;
         public Transform CorridorPoint => corridorPoint;
         public Transform WallPoint => wallPoint;
 
-        public void SetPatrolPoints(Transform door, Transform corridor, Transform wall)
-        {
-            doorPoint = door;
-            corridorPoint = corridor;
-            wallPoint = wall;
-        }
+        #endregion
+
+        #region PROTECTED_METHODS
 
         protected override void CreateStates()
         {
@@ -38,14 +43,22 @@ namespace Runtime.Enemy
         public override void ResetForPool()
         {
             base.ResetForPool();
-
-            // States are kept, just reset current state
             _currentState = null;
+        }
+
+        #endregion
+
+        #region PUBLIC_METHODS
+
+        public void SetPatrolPoints(Transform door, Transform corridor, Transform wall)
+        {
+            doorPoint = door;
+            corridorPoint = corridor;
+            wallPoint = wall;
         }
 
         public void InitializeFromPool()
         {
-            // Ensure states are created
             if (_patrolState == null)
             {
                 CreateStates();
@@ -72,8 +85,6 @@ namespace Runtime.Enemy
             Disappear(DisappearReason.PatrolComplete);
         }
 
-
+        #endregion
     }
 }
-
-

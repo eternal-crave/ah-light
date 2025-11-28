@@ -6,10 +6,16 @@ namespace Runtime.Enemy
 {
     public class EnemyPool : IEnemyPool
     {
+        #region PRIVATE_FIELDS
+
         private readonly EnemyFactory _factory;
         private readonly ObjectPool<EnemyControllerBase> _pool;
         private readonly int _defaultCapacity;
         private readonly int _maxSize;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         [Inject]
         public EnemyPool(EnemyFactory factory)
@@ -28,6 +34,10 @@ namespace Runtime.Enemy
                 maxSize: _maxSize
             );
         }
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         public EnemyControllerBase Get(Vector3 position, Quaternion rotation)
         {
@@ -50,13 +60,19 @@ namespace Runtime.Enemy
             }
         }
 
+        public void Clear()
+        {
+            _pool.Clear();
+        }
+
+        #endregion
+
+        #region PRIVATE_METHODS
+
         private EnemyControllerBase CreateEnemy()
         {
             var enemy = _factory.Create(Vector3.zero, Quaternion.identity);
-            
-            // Store reference to pool for return
             enemy.SetPool(this);
-
             return enemy;
         }
 
@@ -65,7 +81,6 @@ namespace Runtime.Enemy
             enemy.ResetForPool();
             enemy.gameObject.SetActive(true);
             
-            // Re-initialize enemy after being retrieved from pool
             if (enemy is DoorEnemyController doorEnemy)
             {
                 doorEnemy.InitializeFromPool();
@@ -86,10 +101,7 @@ namespace Runtime.Enemy
             }
         }
 
-        public void Clear()
-        {
-            _pool.Clear();
-        }
+        #endregion
     }
 }
 

@@ -6,8 +6,14 @@ namespace Runtime.Enemy
 {
     public class EnemyFactory
     {
+        #region PRIVATE_FIELDS
+
         private readonly IObjectResolver _resolver;
         private readonly EnemyControllerBase _enemyPrefab;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         [Inject]
         public EnemyFactory(IObjectResolver resolver, EnemyControllerBase enemyPrefab)
@@ -15,6 +21,10 @@ namespace Runtime.Enemy
             _resolver = resolver;
             _enemyPrefab = enemyPrefab;
         }
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         public EnemyControllerBase Create(Vector3 position, Quaternion rotation)
         {
@@ -31,6 +41,8 @@ namespace Runtime.Enemy
         {
             return Create(position, Quaternion.identity);
         }
+
+        #endregion
     }
 }
 

@@ -12,6 +12,8 @@ namespace Runtime.InjectionBase
 {
     public class BootstrapLifetimeScope : LifetimeScope
     {
+        #region SERIALIZED_FIELDS
+
         [Header("Scene Settings")]
         [SerializeField] private int gameplaySceneIndex = 1;
         
@@ -21,37 +23,40 @@ namespace Runtime.InjectionBase
         [Header("Scene References")]
         [SerializeField] private PlayerBehaviour playerBehaviour;
 
+        #endregion
+
+        #region PROTECTED_METHODS
+
         protected override void Configure(IContainerBuilder builder)
         {
             SetupStateMachine(builder);
             RegisterServices(builder);
 
-            // Register EntryPoint for Bootstrap initialization
             builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(gameplaySceneIndex);
-            
-            // Register Scene References
             builder.RegisterComponent(playerBehaviour);
         }
+
+        #endregion
+
+        #region PRIVATE_METHODS
 
         private void RegisterServices(IContainerBuilder builder)
         {
             builder.RegisterInstance(inputService).As<IInputService>().AsSelf();
-            
-            // Message Hub (Event Bus)
             builder.Register<MessageHub>(Lifetime.Singleton).As<IMessageHub>();
         }
 
         private void SetupStateMachine(IContainerBuilder builder)
         {
-            // Register State Machine
             builder.Register<GameStateMachine>(Lifetime.Singleton);
 
-            // Register all game states
             builder.Register<BootstrapState>(Lifetime.Singleton)
                 .WithParameter(gameplaySceneIndex)
                 .As<IState>();
             builder.Register<LoadingState>(Lifetime.Singleton).As<IState>();
             builder.Register<GameplayState>(Lifetime.Singleton).As<IState>();
         }
+
+        #endregion
     }
 }

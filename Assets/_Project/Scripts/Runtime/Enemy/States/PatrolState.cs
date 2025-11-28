@@ -4,11 +4,17 @@ namespace Runtime.Enemy.States
 {
     public class PatrolState : IEnemyState
     {
+        #region PRIVATE_FIELDS
+
         private readonly DoorEnemyController _enemy;
         private PatrolPhase _phase;
         private float _waitTimer;
         private const float WaitDuration = 3f;
         private const float ArrivalThreshold = 0.5f;
+
+        #endregion
+
+        #region ENUMS
 
         private enum PatrolPhase
         {
@@ -17,10 +23,18 @@ namespace Runtime.Enemy.States
             GoIntoWall
         }
 
+        #endregion
+
+        #region CONSTRUCTORS
+
         public PatrolState(DoorEnemyController enemy)
         {
             _enemy = enemy;
         }
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         public void Enter()
         {
@@ -58,6 +72,10 @@ namespace Runtime.Enemy.States
             Debug.Log("[PatrolState] Exiting patrol.");
         }
 
+        #endregion
+
+        #region PRIVATE_METHODS
+
         private void HandleWalkFromDoor()
         {
             if (HasReachedDestination())
@@ -71,7 +89,6 @@ namespace Runtime.Enemy.States
 
         private void HandleWaitInCorridor()
         {
-            // Check for player detection while waiting
             if (_enemy.CanDetectPlayer())
             {
                 Debug.Log("[PatrolState] Player detected! Transitioning to chase.");
@@ -79,7 +96,6 @@ namespace Runtime.Enemy.States
                 return;
             }
 
-            // Wait timer
             _waitTimer += Time.deltaTime;
             if (_waitTimer >= WaitDuration)
             {
@@ -105,6 +121,8 @@ namespace Runtime.Enemy.States
             if (_enemy.Agent.pathPending) return false;
             return _enemy.Agent.remainingDistance <= ArrivalThreshold;
         }
+
+        #endregion
     }
 }
 

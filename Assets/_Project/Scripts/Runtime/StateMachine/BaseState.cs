@@ -6,7 +6,13 @@ namespace Core.StateMachine
     /// </summary>
     public abstract class BaseState : IState
     {
+        #region PROPERTIES
+
         public GameStateMachine StateMachine { get; private set; }
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         public void SetStateMachine(GameStateMachine stateMachine)
         {
@@ -15,5 +21,7 @@ namespace Core.StateMachine
 
         public abstract void Enter(object payload = default);
         public abstract void Exit();
+
+        #endregion
     }
 }

@@ -8,14 +8,14 @@ namespace Runtime.Gameplay
 {
     public class LevelController : MonoBehaviour
     {
-        #region SERIALIZED_VARIABLES
+        #region SERIALIZED_FIELDS
 
         [Header("References")]
         [SerializeField] private Transform playerStartPoint;
 
         #endregion
 
-        #region PRIVATE_VARIABLES
+        #region PRIVATE_FIELDS
 
         private PlayerBehaviour _playerController;
         private GameStateMachine _stateMachine;
@@ -36,14 +36,13 @@ namespace Runtime.Gameplay
             _playerController = playerController;
             _stateMachine = stateMachine;
 
-            // Register immediately - guaranteed before GameplayState.Enter()
             var gameplayState = _stateMachine.GetState<GameplayState>();
             gameplayState.SetLevelController(this);
         }
 
         #endregion
 
-        #region PUBLIC_FUNCTIONS
+        #region PUBLIC_METHODS
 
         public void Init()
         {
@@ -52,7 +51,7 @@ namespace Runtime.Gameplay
 
         #endregion
 
-        #region PRIVATE_FUNCTIONS
+        #region PRIVATE_METHODS
 
         private void SetupPlayer()
         {
@@ -66,4 +65,3 @@ namespace Runtime.Gameplay
         #endregion
     }
 }
-

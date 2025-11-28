@@ -6,16 +6,30 @@ namespace Runtime.Player
 {
     public class PlayerBehaviour : MonoBehaviour
     {
+        #region SERIALIZED_FIELDS
+
         [Header("Equipment")]
         [SerializeField] private Torch torch;
 
+        #endregion
+
+        #region PRIVATE_FIELDS
+
         private IInputService _inputService;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         [Inject]
         private void Construct(IInputService inputService)
         {
             _inputService = inputService;
         }
+
+        #endregion
+
+        #region MONO
 
         private void OnEnable()
         {
@@ -27,10 +41,15 @@ namespace Runtime.Player
             _inputService.OnTorchPressed -= HandleTorchInput;
         }
 
+        #endregion
+
+        #region PRIVATE_METHODS
+
         private void HandleTorchInput()
         {
             torch.Toggle();
         }
+
+        #endregion
     }
 }
-

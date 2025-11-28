@@ -2,13 +2,14 @@ using DG.Tweening;
 using NaughtyAttributes;
 using Runtime.Enemy;
 using UnityEngine;
-using UnityEngine.Serialization;
 using VContainer;
 
 namespace Runtime.Gameplay
 {
     public class Door : MonoBehaviour
     {
+        #region SERIALIZED_FIELDS
+
         [Header("Door Settings")]
         [SerializeField] private float openAngle = 90f;
         [SerializeField] private float openDuration = 1f;
@@ -25,20 +26,41 @@ namespace Runtime.Gameplay
         [Header("Enemy Spawn")]
         [SerializeField] private bool spawnEnemyOnOpen = true;
 
+        #endregion
+
+        #region PRIVATE_FIELDS
+
         private Quaternion _closedRotation;
         private bool _isOpen;
-        private EnemyPool _enemyPool;
+        private IEnemyPool _enemyPool;
+
+        #endregion
+
+        #region CONSTRUCTORS
 
         [Inject]
-        private void Construct(EnemyPool enemyPool)
+        private void Construct(IEnemyPool enemyPool)
         {
             _enemyPool = enemyPool;
         }
+
+        #endregion
+
+        #region MONO
 
         private void Awake()
         {
             _closedRotation = doorTransform.rotation;
         }
+
+        private void OnDestroy()
+        {
+            doorTransform.DOKill();
+        }
+
+        #endregion
+
+        #region PUBLIC_METHODS
 
         [Button]
         public void Open()
@@ -60,6 +82,10 @@ namespace Runtime.Gameplay
             doorTransform.DORotate(_closedRotation.eulerAngles, openDuration)
                 .SetEase(openEase);
         }
+
+        #endregion
+
+        #region PRIVATE_METHODS
 
         private void OnDoorOpened()
         {
@@ -84,10 +110,6 @@ namespace Runtime.Gameplay
             }
         }
 
-        private void OnDestroy()
-        {
-            doorTransform.DOKill();
-        }
+        #endregion
     }
 }
-
