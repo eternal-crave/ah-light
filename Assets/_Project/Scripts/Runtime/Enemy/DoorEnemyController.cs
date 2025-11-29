@@ -50,6 +50,11 @@ namespace Runtime.Enemy
 
         #region PUBLIC_METHODS
 
+        public void StartActivity()
+        {
+            ChangeState(_patrolState);
+        }
+        
         public void SetPatrolPoints(Transform door, Transform corridor, Transform wall)
         {
             doorPoint = door;

@@ -29,6 +29,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7846400755411289206}
   - {fileID: 1868447824993759729}
   - {fileID: 1887345155964116453}
   m_Father: {fileID: 8451909695849664510}
@@ -44,7 +45,7 @@ GameObject:
   - component: {fileID: 8451909695849664510}
   - component: {fileID: 3339367409826398292}
   m_Layer: 8
-  m_Name: Door
+  m_Name: Door_Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -83,7 +84,7 @@ MonoBehaviour:
   openDuration: 1
   openEase: 6
   doorTransform: {fileID: 8612999448055873656}
-  doorPoint: {fileID: 8451909695849664510}
+  doorPoint: {fileID: 7846400755411289206}
   corridorPoint: {fileID: 1868447824993759729}
   wallPoint: {fileID: 1887345155964116453}
   spawnEnemyOnOpen: 1
@@ -181,7 +182,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.06999993, y: 1.1, z: -0.5}
-  m_LocalScale: {x: 0.1, y: 2.2, z: 1}
+  m_LocalScale: {x: 0.1, y: 2.2, z: 1.1782}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8612999448055873656}
@@ -292,7 +293,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.1499999, z: 0}
-  m_LocalScale: {x: 0.15, y: 2.3, z: 1.1}
+  m_LocalScale: {x: 0.15, y: 2.3, z: 1.29602}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8333768943892330888}
@@ -527,6 +528,37 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.14, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1728046858170946616}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &6860350898086919043
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7846400755411289206}
+  m_Layer: 8
+  m_Name: StartPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7846400755411289206
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860350898086919043}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -107,6 +107,7 @@ namespace Runtime.Gameplay
             if (enemy != null)
             {
                 enemy.SetPatrolPoints(doorPoint, corridorPoint, wallPoint);
+                enemy.StartActivity();
             }
         }
 
