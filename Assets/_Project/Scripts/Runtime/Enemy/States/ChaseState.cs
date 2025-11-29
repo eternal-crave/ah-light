@@ -50,7 +50,7 @@ namespace Runtime.Enemy.States
             {
                 _enemy.KillPlayer();
                 _hasKilledPlayer = true;
-                _enemy.Agent.isStopped = true;
+                _enemy.StopEnemy();
             }
         }
 

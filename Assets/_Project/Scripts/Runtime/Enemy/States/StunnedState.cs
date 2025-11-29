@@ -34,6 +34,8 @@ namespace Runtime.Enemy.States
                 Debug.Log("[StunnedState] Left torch zone - teleporting to player!");
                 _enemy.TeleportToPlayer();
                 _enemy.KillPlayer();
+                _enemy.StopEnemy();
+                
                 return;
             }
 

@@ -140,9 +140,15 @@ namespace Runtime.Enemy
         {
             if (_player == null) return;
 
-            Vector3 inFrontOfPlayer = _player.transform.position + _player.transform.forward * 1f;
+            Vector3 inFrontOfPlayer = _player.transform.position + _player.transform.forward * 2f;
+            inFrontOfPlayer.y = transform.position.y;
             transform.position = inFrontOfPlayer;
             transform.LookAt(_player.transform);
+        }
+
+        public void StopEnemy()
+        {
+            _agent.isStopped = true;
         }
 
         public void SetInitialRotation(Quaternion rotation)
