@@ -10,7 +10,7 @@ namespace Core.StateMachine
     /// All states are registered via VContainer.
     /// </summary>
     public class GameStateMachine
-    {
+    {   
         #region PRIVATE_FIELDS
 
         private readonly Dictionary<Type, IState> _states = new();

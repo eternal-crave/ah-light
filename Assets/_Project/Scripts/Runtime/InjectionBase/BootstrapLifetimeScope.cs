@@ -61,6 +61,9 @@ namespace Runtime.InjectionBase
                 .As<IState>();
             builder.Register<LoadingState>(Lifetime.Singleton).As<IState>();
             builder.Register<GameplayState>(Lifetime.Singleton).As<IState>();
+            builder.Register<RestartState>(Lifetime.Singleton)
+                .WithParameter(gameplaySceneIndex)
+                .As<IState>();
         }
 
         #endregion

@@ -1,7 +1,12 @@
 using System;
+using Easy.MessageHub;
 using R3;
+using Runtime.Enemy.Events;
 using Runtime.Gameplay;
+using Runtime.Player;
+using Runtime.UI;
 using UnityEngine;
+using VContainer;
 
 namespace Core.StateMachine.States
 {
@@ -15,6 +20,22 @@ namespace Core.StateMachine.States
 
         private LevelController _levelController;
         private IDisposable _waitSubscription;
+        private DeathUI _deathUI;
+        private IMessageHub _messageHub;
+        private Guid _restartSubscriptionToken;
+        private PlayerBehaviour _playerBehaviour;
+
+        #endregion
+
+        #region CONSTRUCTORS
+
+        [Inject]
+        public GameplayState(DeathUI deathUI, IMessageHub messageHub, PlayerBehaviour player)
+        {
+            _deathUI = deathUI;
+            _messageHub = messageHub;
+            _playerBehaviour = player;
+        }
 
         #endregion
 
@@ -33,6 +54,7 @@ namespace Core.StateMachine.States
         {
             Debug.Log("[GameplayState] Gameplay started.");
 
+            SubscribeToRestartRequest();
             _waitSubscription = WaitForLevelController(OnLevelControllerReady);
         }
 
@@ -44,6 +66,7 @@ namespace Core.StateMachine.States
         public override void Exit()
         {
             Debug.Log("[GameplayState] Gameplay ended.");
+            UnsubscribeFromRestartRequest();
             Cleanup();
         }
 
@@ -71,6 +94,8 @@ namespace Core.StateMachine.States
             
             Debug.Log("[GameplayState] LevelController ready, initializing...");
             levelController.Init();
+            _playerBehaviour.FirstPersonController.SetMovementEnabled(true);
+            HideDeathUI();
         }
 
         private void Cleanup()
@@ -83,6 +108,34 @@ namespace Core.StateMachine.States
         {
             _waitSubscription?.Dispose();
             _waitSubscription = null;
+        }
+
+        private void HideDeathUI()
+        {
+            if (_deathUI != null)
+            {
+                _deathUI.Hide();
+            }
+        }
+
+        private void SubscribeToRestartRequest()
+        {
+            _restartSubscriptionToken = _messageHub.Subscribe<RestartRequestedEvent>(HandleRestartRequested);
+        }
+
+        private void UnsubscribeFromRestartRequest()
+        {
+            if (_restartSubscriptionToken != Guid.Empty)
+            {
+                _messageHub.Unsubscribe(_restartSubscriptionToken);
+                _restartSubscriptionToken = Guid.Empty;
+            }
+        }
+
+        private void HandleRestartRequested(RestartRequestedEvent evt)
+        {
+            Debug.Log("[GameplayState] Restart requested, transitioning to RestartState.");
+            StateMachine.Enter<RestartState>();
         }
 
         #endregion

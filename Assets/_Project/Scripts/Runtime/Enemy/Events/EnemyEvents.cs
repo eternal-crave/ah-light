@@ -38,6 +38,11 @@ namespace Runtime.Enemy.Events
         #endregion
     }
 
+    public class RestartRequestedEvent
+    {
+        // Event published when the death sequence is complete and restart is requested
+    }
+
     #region ENUMS
 
     public enum DisappearReason

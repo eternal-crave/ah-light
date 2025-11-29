@@ -87,7 +87,13 @@ namespace Runtime.Player
             _deathSequence.AppendInterval(youDiedDisplayDuration);
             _deathSequence.AppendCallback(IncrementAndDisplayDeathCount);
             _deathSequence.AppendInterval(deathCountDisplayDuration);
-            _deathSequence.AppendCallback(_deathUI.Hide);
+            _deathSequence.AppendCallback(RequestRestart);
+        }
+
+        private void RequestRestart()
+        {
+            Debug.Log("[PlayerDeathHandler] Death sequence complete, requesting restart.");
+            _messageHub.Publish(new RestartRequestedEvent());
         }
         
         private void IncrementAndDisplayDeathCount()
