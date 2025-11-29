@@ -76,8 +76,9 @@ MonoBehaviour:
   sprintSpeed: 7
   gravity: -15
   jumpHeight: 1.2
+  jumpEnabled: 0
   cameraTransform: {fileID: 4000000000000000001}
-  lookSensitivity: 0.05
+  lookSensitivity: 0.1
   topClamp: 89
   bottomClamp: -89
   groundedOffset: -0.14
@@ -97,6 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09a3954462056de4db66a06ad25deeb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Runtime.Player.PlayerBehaviour
+  firstPersonController: {fileID: 114000000000000000}
   torch: {fileID: 8533440354937075731}
 --- !u!1 &1000000000000000001
 GameObject:
@@ -303,7 +305,7 @@ Light:
       e32: 0
       e33: 1
     m_UseCullingMatrixOverride: 0
-  m_Cookie: {fileID: 0}
+  m_Cookie: {fileID: 2800000, guid: 76170edb2b6c205499dc52e0f1bb91c3, type: 3}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
   m_RenderMode: 0
