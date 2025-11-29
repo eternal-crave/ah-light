@@ -4,6 +4,7 @@ using Core.StateMachine.States;
 using Easy.MessageHub;
 using Runtime.Player;
 using Runtime.Services;
+using Runtime.UI;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,6 +23,7 @@ namespace Runtime.InjectionBase
 
         [Header("Scene References")]
         [SerializeField] private PlayerBehaviour playerBehaviour;
+        [SerializeField] private DeathUI deathUI;
 
         #endregion
 
@@ -31,9 +33,12 @@ namespace Runtime.InjectionBase
         {
             SetupStateMachine(builder);
             RegisterServices(builder);
-
+            
             builder.RegisterEntryPoint<BootstrapEntryPoint>().WithParameter(gameplaySceneIndex);
             builder.RegisterComponent(playerBehaviour);
+            builder.RegisterComponent(deathUI);
+            
+            builder.RegisterEntryPoint<PlayerDeathHandler>();
         }
 
         #endregion
@@ -44,6 +49,7 @@ namespace Runtime.InjectionBase
         {
             builder.RegisterInstance(inputService).As<IInputService>().AsSelf();
             builder.Register<MessageHub>(Lifetime.Singleton).As<IMessageHub>();
+            builder.Register<DeathCounterService>(Lifetime.Singleton).As<IDeathCounterService>();
         }
 
         private void SetupStateMachine(IContainerBuilder builder)
