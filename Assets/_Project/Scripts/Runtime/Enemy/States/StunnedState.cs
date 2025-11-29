@@ -7,6 +7,7 @@ namespace Runtime.Enemy.States
         #region PRIVATE_FIELDS
 
         private readonly DoorEnemyController _enemy;
+        private bool _hasResolved;
 
         #endregion
 
@@ -25,16 +26,21 @@ namespace Runtime.Enemy.States
         {
             Debug.Log("[StunnedState] Enemy stunned by torch!");
             _enemy.Agent.isStopped = true;
+            _hasResolved = false;
         }
 
         public void Execute()
         {
+            if (_hasResolved)
+                return;
+
             if (!_enemy.IsInTorchZone)
             {
                 Debug.Log("[StunnedState] Left torch zone - teleporting to player!");
                 _enemy.TeleportToPlayer();
                 _enemy.KillPlayer();
                 _enemy.StopEnemy();
+                _hasResolved = true;
                 
                 return;
             }

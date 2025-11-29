@@ -143,7 +143,7 @@ namespace Runtime.Enemy
             Vector3 inFrontOfPlayer = _player.transform.position + _player.transform.forward * 2f;
             inFrontOfPlayer.y = transform.position.y;
             transform.position = inFrontOfPlayer;
-            transform.LookAt(_player.transform);
+            transform.LookAt(_player.transform.position + Vector3.up * 1.5f);
         }
 
         public void StopEnemy()

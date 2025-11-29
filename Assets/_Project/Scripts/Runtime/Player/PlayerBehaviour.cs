@@ -8,6 +8,9 @@ namespace Runtime.Player
     {
         #region SERIALIZED_FIELDS
 
+        [Header("Controller")]
+        [SerializeField] private FirstPersonController firstPersonController;
+        
         [Header("Equipment")]
         [SerializeField] private Torch torch;
 
@@ -18,6 +21,12 @@ namespace Runtime.Player
         private IInputService _inputService;
 
         #endregion
+
+        #region PROPERTIES
+
+        public FirstPersonController FirstPersonController => firstPersonController;
+
+        #endregion  
 
         #region CONSTRUCTORS
 

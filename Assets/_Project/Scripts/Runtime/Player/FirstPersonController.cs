@@ -14,6 +14,7 @@ namespace Runtime.Player
         [SerializeField] private float sprintSpeed = 7f;
         [SerializeField] private float gravity = -15f;
         [SerializeField] private float jumpHeight = 1.2f;
+        [SerializeField] private bool jumpEnabled = false;
 
         [Header("Look")]
         [SerializeField] private Transform cameraTransform;
@@ -35,6 +36,7 @@ namespace Runtime.Player
         private float _verticalVelocity;
         private float _cameraPitch;
         private bool _isGrounded;
+        private bool _movementEnabled = true;
         private const float Threshold = 0.01f;
 
         #endregion
@@ -84,12 +86,15 @@ namespace Runtime.Player
 
         private void HandleGravityAndJump()
         {
+            if (!_movementEnabled)
+                return;
+
             if (_isGrounded)
             {
                 if (_verticalVelocity < 0f)
                     _verticalVelocity = -2f;
 
-                if (_inputService.IsJumpPressed)
+                if (jumpEnabled && _inputService.IsJumpPressed)
                     _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
             }
 
@@ -98,6 +103,9 @@ namespace Runtime.Player
 
         private void HandleMovement()
         {
+            if (!_movementEnabled)
+                return;
+
             var speed = _inputService.IsSprintPressed ? sprintSpeed : walkSpeed;
             var input = _inputService.MoveInput;
 
@@ -113,18 +121,31 @@ namespace Runtime.Player
 
         private void HandleLook()
         {
+            if (!_movementEnabled)
+                return;
+
             var look = _inputService.LookInput;
 
             if (look.sqrMagnitude < Threshold)
                 return;
 
-            transform.Rotate(Vector3.up * look.x * lookSensitivity);
+            float adjustedSensitivity = lookSensitivity * 0.5f;
+            transform.Rotate(Vector3.up * look.x * adjustedSensitivity);
 
-            _cameraPitch -= look.y * lookSensitivity;
+            _cameraPitch -= look.y * adjustedSensitivity;
             _cameraPitch = Mathf.Clamp(_cameraPitch, bottomClamp, topClamp);
 
             if (cameraTransform != null)
                 cameraTransform.localRotation = Quaternion.Euler(_cameraPitch, 0f, 0f);
+        }
+
+        #endregion
+
+        #region PUBLIC_METHODS
+
+        public void SetMovementEnabled(bool enabled)
+        {
+            _movementEnabled = enabled;
         }
 
         #endregion

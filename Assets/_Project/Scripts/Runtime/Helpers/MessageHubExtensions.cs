@@ -5,7 +5,7 @@ using R3.Triggers;
 using Easy.MessageHub;
 using Assets.Scripts.Infrastructure;
 
-namespace Assets.Scripts.Infrastructure.EasyMessageHub
+namespace Helpers
 {
     public static class MessageHubExtensions
     {
