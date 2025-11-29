@@ -7,6 +7,7 @@ namespace Runtime.Enemy.States
         #region PRIVATE_FIELDS
 
         private readonly DoorEnemyController _enemy;
+        private bool _hasKilledPlayer;
 
         #endregion
 
@@ -25,6 +26,7 @@ namespace Runtime.Enemy.States
         {
             Debug.Log("[ChaseState] Starting chase!");
             _enemy.Agent.isStopped = false;
+            _hasKilledPlayer = false;
         }
 
         public void Execute()
@@ -36,6 +38,9 @@ namespace Runtime.Enemy.States
                 return;
             }
 
+            if (_hasKilledPlayer)
+                return;
+
             if (_enemy.Player != null)
             {
                 _enemy.Agent.SetDestination(_enemy.Player.position);
@@ -44,6 +49,8 @@ namespace Runtime.Enemy.States
             if (_enemy.IsInKillRange())
             {
                 _enemy.KillPlayer();
+                _hasKilledPlayer = true;
+                _enemy.Agent.isStopped = true;
             }
         }
 

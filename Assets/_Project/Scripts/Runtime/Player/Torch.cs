@@ -10,7 +10,7 @@ namespace Runtime.Player
 
         [SerializeField] private Light torchLight;
         [SerializeField] private float detectionRange = 15f;
-        [SerializeField] private float detectionAngle = 30f;
+        [SerializeField] private float sphereCastRadius = 1.5f;
         [SerializeField] private LayerMask enemyLayer;
 
         #endregion
@@ -79,25 +79,23 @@ namespace Runtime.Player
         {
             CleanupDestroyedEnemies();
 
-            if (!_isOn)
+            if (!_isOn || _cameraTransform == null)
                 return;
 
-            var colliders = Physics.OverlapSphere(transform.position, detectionRange, enemyLayer);
+            Vector3 origin = _cameraTransform.position;
+            Vector3 direction = _cameraTransform.forward;
+            
+            RaycastHit[] hits = Physics.SphereCastAll(origin, sphereCastRadius, direction, detectionRange, enemyLayer);
             var currentFrameEnemies = new HashSet<EnemyControllerBase>();
 
-            foreach (var col in colliders)
+            foreach (var hit in hits)
             {
-                var enemy = col.GetComponent<EnemyControllerBase>();
+                var enemy = hit.collider.GetComponent<EnemyControllerBase>();
                 if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
 
-                bool inCone = IsInLightCone(enemy.transform.position);
-                enemy.SetTorchZone(inCone);
-
-                if (inCone)
-                {
-                    currentFrameEnemies.Add(enemy);
-                    _trackedEnemies.Add(enemy);
-                }
+                enemy.SetTorchZone(true);
+                currentFrameEnemies.Add(enemy);
+                _trackedEnemies.Add(enemy);
             }
 
             foreach (var enemy in _trackedEnemies)
@@ -138,15 +136,6 @@ namespace Runtime.Player
             _trackedEnemies.Clear();
         }
 
-        private bool IsInLightCone(Vector3 targetPosition)
-        {
-            if (_cameraTransform == null) return false;
-
-            Vector3 directionToTarget = (targetPosition - _cameraTransform.position).normalized;
-            float angle = Vector3.Angle(_cameraTransform.forward, directionToTarget);
-
-            return angle <= detectionAngle;
-        }
 
         #endregion
 
@@ -157,10 +146,26 @@ namespace Runtime.Player
             if (_cameraTransform == null && Camera.main != null)
                 _cameraTransform = Camera.main.transform;
 
-            if (_cameraTransform == null) return;
+            if (_cameraTransform == null || !_isOn) return;
 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, detectionRange);
+            Vector3 origin = _cameraTransform.position;
+            Vector3 direction = _cameraTransform.forward;
+            Vector3 endPoint = origin + direction * detectionRange;
+
+            // Draw the spherecast visualization
+            Gizmos.color = Color.cyan;
+            
+            // Draw start sphere
+            Gizmos.DrawWireSphere(origin, sphereCastRadius);
+            
+            // Draw end sphere
+            Gizmos.DrawWireSphere(endPoint, sphereCastRadius);
+            
+            // Draw connecting lines to visualize the cast volume
+            Gizmos.DrawLine(origin + Vector3.up * sphereCastRadius, endPoint + Vector3.up * sphereCastRadius);
+            Gizmos.DrawLine(origin + Vector3.down * sphereCastRadius, endPoint + Vector3.down * sphereCastRadius);
+            Gizmos.DrawLine(origin + Vector3.left * sphereCastRadius, endPoint + Vector3.left * sphereCastRadius);
+            Gizmos.DrawLine(origin + Vector3.right * sphereCastRadius, endPoint + Vector3.right * sphereCastRadius);
         }
 
         #endregion
