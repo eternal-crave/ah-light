@@ -15,4 +15,5 @@ MonoBehaviour:
   EnableEnemySpawning: 1
   EnemySpawnChance: 1
   MinSpawnDistanceFromPlayer: 3
-  MaxSpawnDistanceFromPlayer: 50
+  MaxSpawnDistanceFromPlayer: 10
+  SpawnCheckInterval: 2

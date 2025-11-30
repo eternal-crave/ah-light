@@ -21,10 +21,17 @@ namespace Runtime.Gameplay
         [Header("Patrol Points")]
         [SerializeField] private Transform doorPoint;
         [SerializeField] private Transform corridorPoint;
+        [SerializeField] private Transform[] corridorPatrolPoints;
         [SerializeField] private Transform wallPoint;
 
         [Header("Enemy Spawn")]
         [SerializeField] private bool spawnEnemyOnOpen = true;
+
+        [Header("Auto Close Settings")]
+        [SerializeField] private bool enableAutoClose = true;
+        [SerializeField, Range(0f, 1f)] private float autoCloseChance = 0.5f;
+        [SerializeField] private float minOpenDuration = 2f;
+        [SerializeField] private float maxOpenDuration = 5f;
 
         #endregion
 
@@ -33,6 +40,8 @@ namespace Runtime.Gameplay
         private Quaternion _closedRotation;
         private bool _isOpen;
         private IEnemyPool _enemyPool;
+        private bool _enemySpawned;
+        private Tween _autoCloseTween;
 
         #endregion
 
@@ -56,6 +65,7 @@ namespace Runtime.Gameplay
         private void OnDestroy()
         {
             doorTransform.DOKill();
+            KillAutoCloseTween();
         }
 
         #endregion
@@ -79,6 +89,8 @@ namespace Runtime.Gameplay
             if (!_isOpen) return;
 
             _isOpen = false;
+            _enemySpawned = false;
+            KillAutoCloseTween();
             doorTransform.DORotate(_closedRotation.eulerAngles, openDuration)
                 .SetEase(openEase);
         }
@@ -89,9 +101,17 @@ namespace Runtime.Gameplay
 
         private void OnDoorOpened()
         {
+            _enemySpawned = false;
+            
             if (spawnEnemyOnOpen && _enemyPool != null)
             {
                 SpawnEnemy();
+            }
+            
+            // If no enemy was spawned, check if door should auto-close
+            if (!_enemySpawned && enableAutoClose)
+            {
+                TryAutoClose();
             }
         }
 
@@ -106,8 +126,49 @@ namespace Runtime.Gameplay
             var enemy = _enemyPool.Get(doorPoint.position, doorPoint.rotation) as DoorEnemyController;
             if (enemy != null)
             {
-                enemy.SetPatrolPoints(doorPoint, corridorPoint, wallPoint);
+                // Use the overloaded method if we have corridor patrol points
+                if (corridorPatrolPoints != null && corridorPatrolPoints.Length > 0)
+                {
+                    enemy.SetPatrolPoints(doorPoint, corridorPoint, corridorPatrolPoints, wallPoint);
+                }
+                else
+                {
+                    enemy.SetPatrolPoints(doorPoint, corridorPoint, wallPoint);
+                }
                 enemy.StartActivity();
+                _enemySpawned = true;
+            }
+        }
+
+        private void TryAutoClose()
+        {
+            // Check random chance to close
+            if (Random.value > autoCloseChance)
+                return;
+
+            // Kill any existing auto-close tween
+            KillAutoCloseTween();
+
+            // Calculate random delay before closing
+            float delay = Random.Range(minOpenDuration, maxOpenDuration);
+            
+            // Schedule door to close after delay
+            _autoCloseTween = DOVirtual.DelayedCall(delay, () =>
+            {
+                if (_isOpen && !_enemySpawned)
+                {
+                    Close();
+                }
+                _autoCloseTween = null;
+            });
+        }
+
+        private void KillAutoCloseTween()
+        {
+            if (_autoCloseTween != null)
+            {
+                _autoCloseTween.Kill();
+                _autoCloseTween = null;
             }
         }
 

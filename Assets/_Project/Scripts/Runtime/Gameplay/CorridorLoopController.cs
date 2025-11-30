@@ -30,6 +30,12 @@ namespace Runtime.Gameplay
 
         #endregion
 
+        #region PROPERTIES
+
+        public GameObject[] Corridors => corridors;
+
+        #endregion
+
         #region CONSTRUCTORS
 
         [Inject]
@@ -244,7 +250,7 @@ namespace Runtime.Gameplay
             }
             
             // If we found a next corridor, use that spacing
-            if (nextInitialZ != float.MaxValue)
+            if (!Mathf.Approximately(nextInitialZ, float.MaxValue))
             {
                 spacing = nextInitialZ - furthestInitialZ;
             }
@@ -260,7 +266,7 @@ namespace Runtime.Gameplay
                     }
                 }
                 
-                if (firstInitialZ != float.MaxValue)
+                if (!Mathf.Approximately(firstInitialZ, float.MaxValue))
                 {
                     // Calculate spacing: from furthest to end of pattern, then from start to first
                     // We'll use the spacing from first to second as the pattern spacing
@@ -273,7 +279,7 @@ namespace Runtime.Gameplay
                         }
                     }
                     
-                    if (secondInitialZ != float.MaxValue)
+                    if (!Mathf.Approximately(secondInitialZ, float.MaxValue))
                     {
                         spacing = secondInitialZ - firstInitialZ;
                     }
@@ -337,7 +343,7 @@ namespace Runtime.Gameplay
             }
             
             // If we found a previous corridor, use that spacing
-            if (prevInitialZ != float.MinValue)
+            if (!Mathf.Approximately(prevInitialZ, float.MinValue))
             {
                 spacing = closestInitialZ - prevInitialZ;
             }
@@ -353,7 +359,7 @@ namespace Runtime.Gameplay
                     }
                 }
                 
-                if (lastInitialZ != float.MinValue)
+                if (!Mathf.Approximately(lastInitialZ, float.MinValue))
                 {
                     // Calculate spacing: from last to closest
                     // We'll use the spacing from second-to-last to last as the pattern spacing
@@ -366,11 +372,11 @@ namespace Runtime.Gameplay
                         }
                     }
                     
-                    if (secondLastInitialZ != float.MinValue)
+                    if (!Mathf.Approximately(secondLastInitialZ, float.MinValue))
                     {
                         spacing = lastInitialZ - secondLastInitialZ;
                     }
-                }
+                } 
             }
 
             // Position this corridor before the closest corridor, maintaining the spacing pattern
@@ -378,7 +384,6 @@ namespace Runtime.Gameplay
             var currentPos = corridor.transform.position;
             corridor.transform.position = new Vector3(currentPos.x, currentPos.y, newZ);
 
-            // TODO: In the future, logic for variety (e.g., swapping prefabs) may be implemented here
         }
 
         #endregion
@@ -415,7 +420,71 @@ namespace Runtime.Gameplay
             _furthestZPosition += corridorLength;
         }
 
+        // /// <summary>
+        // /// Gets the index of the next corridor (ahead in Z direction) from the given corridor index.
+        // /// </summary>
+        // public int GetNextCorridorIndex(int currentIndex)
+        // {
+        //     if (corridors == null || currentIndex < 0 || currentIndex >= corridors.Length)
+        //         return -1;
+        //
+        //     float currentZ = corridors[currentIndex].transform.position.z;
+        //     int nextIndex = -1;
+        //     float minDistance = float.MaxValue;
+        //
+        //     for (int i = 0; i < corridors.Length; i++)
+        //     {
+        //         if (i == currentIndex || corridors[i] == null)
+        //             continue;
+        //
+        //         float otherZ = corridors[i].transform.position.z;
+        //         float distance = otherZ - currentZ;
+        //
+        //         // Find the closest corridor ahead
+        //         if (distance > 0 && distance < minDistance)
+        //         {
+        //             minDistance = distance;
+        //             nextIndex = i;
+        //         }
+        //     }
+        //
+        //     return nextIndex;
+        // }
+        //
+        // /// <summary>
+        // /// Gets the index of the previous corridor (behind in Z direction) from the given corridor index.
+        // /// </summary>
+        // public int GetPreviousCorridorIndex(int currentIndex)
+        // {
+        //     if (corridors == null || currentIndex < 0 || currentIndex >= corridors.Length)
+        //         return -1;
+        //
+        //     float currentZ = corridors[currentIndex].transform.position.z;
+        //     int prevIndex = -1;
+        //     float minDistance = float.MaxValue;
+        //
+        //     for (int i = 0; i < corridors.Length; i++)
+        //     {
+        //         if (i == currentIndex || corridors[i] == null)
+        //             continue;
+        //
+        //         float otherZ = corridors[i].transform.position.z;
+        //         float distance = currentZ - otherZ;
+        //
+        //         // Find the closest corridor behind
+        //         if (distance > 0 && distance < minDistance)
+        //         {
+        //             minDistance = distance;
+        //             prevIndex = i;
+        //         }
+        //     }
+        //
+        //     return prevIndex;
+        // }
+
         #endregion
     }
 }
+
+
 
