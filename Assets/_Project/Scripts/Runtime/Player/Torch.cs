@@ -93,7 +93,7 @@ namespace Runtime.Player
                 var enemy = hit.collider.GetComponent<EnemyControllerBase>();
                 if (enemy == null || !enemy.gameObject.activeInHierarchy) continue;
 
-                enemy.SetTorchZone(true);
+                enemy.SetTorchZonePresence(true);
                 currentFrameEnemies.Add(enemy);
                 _trackedEnemies.Add(enemy);
             }
@@ -102,7 +102,7 @@ namespace Runtime.Player
             {
                 if (!currentFrameEnemies.Contains(enemy) && enemy != null && enemy.gameObject.activeInHierarchy)
                 {
-                    enemy.SetTorchZone(false);
+                    enemy.SetTorchZonePresence(false);
                 }
             }
 
@@ -130,7 +130,7 @@ namespace Runtime.Player
             foreach (var enemy in _trackedEnemies)
             {
                 if (enemy != null && enemy.gameObject.activeInHierarchy)
-                    enemy.SetTorchZone(false);
+                    enemy.SetTorchZonePresence(false);
             }
 
             _trackedEnemies.Clear();

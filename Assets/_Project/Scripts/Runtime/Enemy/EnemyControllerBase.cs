@@ -86,7 +86,7 @@ namespace Runtime.Enemy
 
         #region PUBLIC_METHODS
 
-        public void SetTorchZone(bool inZone)
+        public void SetTorchZonePresence(bool inZone)
         {
             bool wasInZone = _isInTorchZone;
             _isInTorchZone = inZone;
@@ -148,22 +148,39 @@ namespace Runtime.Enemy
 
         public void StopEnemy()
         {
-            _agent.isStopped = true;
+            if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            {
+                _agent.isStopped = true;
+            }
         }
 
         public void SetInitialRotation(Quaternion rotation)
         {
-            bool wasUpdatingRotation = _agent.updateRotation;
-            _agent.updateRotation = false;
-            
-            transform.rotation = rotation;
-            
-            _agent.updateRotation = wasUpdatingRotation;
+            if (_agent != null && _agent.isActiveAndEnabled)
+            {
+                bool wasUpdatingRotation = _agent.updateRotation;
+                _agent.updateRotation = false;
+                
+                transform.rotation = rotation;
+                
+                _agent.updateRotation = wasUpdatingRotation;
+            }
+            else
+            {
+                transform.rotation = rotation;
+            }
         }
 
         public void SetInitialPosition(Vector3 position)
         {
-            _agent.Warp(position);
+            if (_agent != null && _agent.isActiveAndEnabled)
+            {
+                _agent.Warp(position);
+            }
+            else
+            {
+                transform.position = position;
+            }
         }
 
         public virtual void ResetForPool()
@@ -171,9 +188,16 @@ namespace Runtime.Enemy
             _isInTorchZone = false;
             _torchHoldTime = 0f;
             
-            _agent.ResetPath();
-            _agent.isStopped = false;
-            _agent.updateRotation = true;
+            if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            {
+                _agent.ResetPath();
+                _agent.isStopped = false;
+            }
+            
+            if (_agent != null && _agent.isActiveAndEnabled)
+            {
+                _agent.updateRotation = true;
+            }
         }
 
         public virtual void CleanupForPool()
@@ -181,8 +205,11 @@ namespace Runtime.Enemy
             _currentState?.Exit();
             _currentState = null;
             
-            _agent.ResetPath();
-            _agent.isStopped = true;
+            if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            {
+                _agent.ResetPath();
+                _agent.isStopped = true;
+            }
         }
 
         public void SetPool(IEnemyPool pool)

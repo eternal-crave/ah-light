@@ -11,6 +11,7 @@ namespace Runtime.Enemy
         [Header("Patrol Points")]
         [SerializeField] private Transform doorPoint;
         [SerializeField] private Transform corridorPoint;
+        [SerializeField] private Transform[] corridorPatrolPoints;
         [SerializeField] private Transform wallPoint;
 
         #endregion
@@ -27,6 +28,7 @@ namespace Runtime.Enemy
 
         public Transform DoorPoint => doorPoint;
         public Transform CorridorPoint => corridorPoint;
+        public Transform[] CorridorPatrolPoints => corridorPatrolPoints;
         public Transform WallPoint => wallPoint;
 
         #endregion
@@ -59,6 +61,14 @@ namespace Runtime.Enemy
         {
             doorPoint = door;
             corridorPoint = corridor;
+            wallPoint = wall;
+        }
+
+        public void SetPatrolPoints(Transform door, Transform corridor, Transform[] corridorPatrol, Transform wall)
+        {
+            doorPoint = door;
+            corridorPoint = corridor;
+            corridorPatrolPoints = corridorPatrol;
             wallPoint = wall;
         }
 

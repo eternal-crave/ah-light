@@ -111,6 +111,63 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &1528787004438295186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8885793773094954387}
+  - component: {fileID: 4545919884789071070}
+  m_Layer: 0
+  m_Name: NavMeshLink
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8885793773094954387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528787004438295186}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9182201559670471326}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4545919884789071070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528787004438295186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eeb5dc026fdf4b488bc7ae0138ab719, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshLink
+  m_SerializedVersion: 1
+  m_AgentTypeID: 0
+  m_StartPoint: {x: 0, y: 0, z: -2.5}
+  m_EndPoint: {x: 0, y: 0, z: 2.5}
+  m_StartTransform: {fileID: 0}
+  m_EndTransform: {fileID: 0}
+  m_Activated: 1
+  m_Width: 8
+  m_CostModifier: 1
+  m_IsOverridingCost: 0
+  m_Bidirectional: 1
+  m_AutoUpdatePosition: 0
+  m_Area: 0
 --- !u!1 &1935168508300219545
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,7 +197,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0.0675, y: -0.5, z: 9.9348}
-  m_LocalScale: {x: 7.2664084, y: 1, z: 22.171032}
+  m_LocalScale: {x: 7.2664084, y: 1, z: 19}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9182201559670471326}
@@ -160,7 +217,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1935168508300219545}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -231,7 +288,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: 8aac88d97e40e3c4d97b805e037f03ff, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 9de9c7258437d3a41913e934a3c818bd, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &2206275803665600127
 GameObject:
@@ -575,6 +632,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9182201559670471326}
+  - component: {fileID: 1240753334489849177}
   m_Layer: 0
   m_Name: Corridor
   m_TagString: Untagged
@@ -605,8 +663,25 @@ Transform:
   - {fileID: 6075429004539250606}
   - {fileID: 2153107393260417145}
   - {fileID: 3533001242946995197}
+  - {fileID: 8885793773094954387}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1240753334489849177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6826836460291532403}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2b141010ff27414996c1caf1c10048f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Gameplay.Corridor
+  doors:
+  - {fileID: 8898502412163648945}
+  - {fileID: 1102438099882756100}
+  - {fileID: 5115447224062017491}
 --- !u!1 &8481636563903636032
 GameObject:
   m_ObjectHideFlags: 0
@@ -841,6 +916,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DoorContainer
       objectReference: {fileID: 0}
+    - target: {fileID: 1754076188012764135, guid: a993d05a0b8a5fb498130e9db254f1a7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7330085319406941503, guid: a993d05a0b8a5fb498130e9db254f1a7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.52
@@ -886,6 +965,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a993d05a0b8a5fb498130e9db254f1a7, type: 3}
+--- !u!114 &1102438099882756100 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4514108910092352149, guid: a993d05a0b8a5fb498130e9db254f1a7, type: 3}
+  m_PrefabInstance: {fileID: 3596673780927476369}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fdc48306b27b04b841e00cefe93397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Gameplay.Door
 --- !u!4 &6075429004539250606 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7330085319406941503, guid: a993d05a0b8a5fb498130e9db254f1a7, type: 3}
@@ -969,6 +1059,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8451909695849664510, guid: 2289514c6d07a614aa1efecbf56504d2, type: 3}
   m_PrefabInstance: {fileID: 6136722094781664741}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8898502412163648945 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3339367409826398292, guid: 2289514c6d07a614aa1efecbf56504d2, type: 3}
+  m_PrefabInstance: {fileID: 6136722094781664741}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fdc48306b27b04b841e00cefe93397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Gameplay.Door
 --- !u!1001 &7541955780027711367
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1035,3 +1136,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8451909695849664510, guid: 2289514c6d07a614aa1efecbf56504d2, type: 3}
   m_PrefabInstance: {fileID: 7541955780027711367}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5115447224062017491 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3339367409826398292, guid: 2289514c6d07a614aa1efecbf56504d2, type: 3}
+  m_PrefabInstance: {fileID: 7541955780027711367}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51fdc48306b27b04b841e00cefe93397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Runtime.Gameplay.Door

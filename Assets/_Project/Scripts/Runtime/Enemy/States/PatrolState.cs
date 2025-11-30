@@ -11,6 +11,9 @@ namespace Runtime.Enemy.States
         private float _waitTimer;
         private const float WaitDuration = 3f;
         private const float ArrivalThreshold = 0.5f;
+        private int _currentPatrolPointIndex;
+        private float _patrolPointWaitTime;
+        private const float PatrolPointWaitDuration = 1f;
 
         #endregion
 
@@ -41,6 +44,8 @@ namespace Runtime.Enemy.States
             Debug.Log("[PatrolState] Starting patrol from door.");
             _phase = PatrolPhase.WalkFromDoor;
             _waitTimer = 0f;
+            _currentPatrolPointIndex = 0;
+            _patrolPointWaitTime = 0f;
 
             if (_enemy.DoorPoint != null)
                 _enemy.SetInitialPosition(_enemy.DoorPoint.position);
@@ -80,10 +85,25 @@ namespace Runtime.Enemy.States
         {
             if (HasReachedDestination())
             {
-                Debug.Log("[PatrolState] Reached corridor, starting wait.");
+                Debug.Log("[PatrolState] Reached corridor, starting patrol.");
                 _phase = PatrolPhase.WaitInCorridor;
                 _waitTimer = 0f;
-                _enemy.Agent.ResetPath();
+                _currentPatrolPointIndex = 0;
+                _patrolPointWaitTime = 0f;
+                
+                // If we have patrol points, start patrolling to the first one
+                if (HasCorridorPatrolPoints())
+                {
+                    var patrolPoints = _enemy.CorridorPatrolPoints;
+                    if (patrolPoints != null && patrolPoints.Length > 0 && patrolPoints[0] != null)
+                    {
+                        _enemy.Agent.SetDestination(patrolPoints[0].position);
+                    }
+                }
+                else
+                {
+                    _enemy.Agent.ResetPath();
+                }
             }
         }
 
@@ -96,6 +116,60 @@ namespace Runtime.Enemy.States
                 return;
             }
 
+            // Check if we have patrol points to walk between
+            if (HasCorridorPatrolPoints())
+            {
+                HandlePatrolBetweenPoints();
+            }
+            else
+            {
+                // Fallback to old behavior: just wait
+                HandleWaitBehavior();
+            }
+        }
+
+        private bool HasCorridorPatrolPoints()
+        {
+            return _enemy.CorridorPatrolPoints != null && _enemy.CorridorPatrolPoints.Length > 0;
+        }
+
+        private void HandlePatrolBetweenPoints()
+        {
+            var patrolPoints = _enemy.CorridorPatrolPoints;
+            
+            // Check if we've reached the current patrol point
+            if (HasReachedDestination())
+            {
+                // Wait at the patrol point
+                _patrolPointWaitTime += Time.deltaTime;
+                if (_patrolPointWaitTime >= PatrolPointWaitDuration)
+                {
+                    // Move to next patrol point
+                    _patrolPointWaitTime = 0f;
+                    _currentPatrolPointIndex = (_currentPatrolPointIndex + 1) % patrolPoints.Length;
+                    
+                    if (patrolPoints[_currentPatrolPointIndex] != null)
+                    {
+                        _enemy.Agent.SetDestination(patrolPoints[_currentPatrolPointIndex].position);
+                    }
+                }
+            }
+
+            // Check total wait time
+            _waitTimer += Time.deltaTime;
+            if (_waitTimer >= WaitDuration)
+            {
+                Debug.Log("[PatrolState] Patrol complete, going into wall.");
+                _phase = PatrolPhase.GoIntoWall;
+                _enemy.Agent.ResetPath();
+
+                if (_enemy.WallPoint != null)
+                    _enemy.Agent.SetDestination(_enemy.WallPoint.position);
+            }
+        }
+
+        private void HandleWaitBehavior()
+        {
             _waitTimer += Time.deltaTime;
             if (_waitTimer >= WaitDuration)
             {
