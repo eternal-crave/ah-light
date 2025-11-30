@@ -76,7 +76,7 @@ namespace Runtime.Player
 
         private void ShowDeathUI()
         {
-            _deathUI.Show();
+            DOVirtual.DelayedCall(0.5f,_deathUI.Show);
         }
 
         private void StartDeathSequence()

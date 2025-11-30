@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6347883351325437823
 Transform:
   m_ObjectHideFlags: 0
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_CostModifier: 1
   m_IsOverridingCost: 0
   m_Bidirectional: 1
-  m_AutoUpdatePosition: 0
+  m_AutoUpdatePosition: 1
   m_Area: 0
 --- !u!1 &1935168508300219545
 GameObject:
@@ -682,6 +682,7 @@ MonoBehaviour:
   - {fileID: 8898502412163648945}
   - {fileID: 1102438099882756100}
   - {fileID: 5115447224062017491}
+  navMeshLink: {fileID: 0}
 --- !u!1 &8481636563903636032
 GameObject:
   m_ObjectHideFlags: 0

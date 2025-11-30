@@ -676,10 +676,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: DeathUI
       objectReference: {fileID: 0}
-    - target: {fileID: 2442219995631877337, guid: f2250ba81965f884caf48cb9f0509794, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
