@@ -25,7 +25,7 @@ namespace Runtime.Enemy.States
         public void Enter()
         {
             Debug.Log("[ChaseState] Starting chase!");
-            _enemy.Agent.isStopped = false;
+            _enemy.ResumeEnemy();
             _hasKilledPlayer = false;
         }
 
@@ -57,7 +57,7 @@ namespace Runtime.Enemy.States
         public void Exit()
         {
             Debug.Log("[ChaseState] Stopping chase.");
-            _enemy.Agent.ResetPath();
+            _enemy.ResetAgentPath();
         }
 
         #endregion

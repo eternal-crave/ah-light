@@ -32,6 +32,7 @@ namespace Runtime.Enemy
         protected float _torchHoldTime;
         protected bool _statesCreated = false;
         protected IEnemyPool _pool;
+        protected Vector3 _originalScale;
 
         #endregion
 
@@ -64,6 +65,7 @@ namespace Runtime.Enemy
         protected virtual void Awake()
         {
             _agent = GetComponent<NavMeshAgent>();
+            _originalScale = transform.localScale;
         }
 
         protected virtual void Start()
@@ -154,6 +156,22 @@ namespace Runtime.Enemy
             }
         }
 
+        public void ResumeEnemy()
+        {
+            if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            {
+                _agent.isStopped = false;
+            }
+        }
+
+        public void ResetAgentPath()
+        {
+            if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
+            {
+                _agent.ResetPath();
+            }
+        }
+
         public void SetInitialRotation(Quaternion rotation)
         {
             if (_agent != null && _agent.isActiveAndEnabled)
@@ -187,6 +205,7 @@ namespace Runtime.Enemy
         {
             _isInTorchZone = false;
             _torchHoldTime = 0f;
+            transform.localScale = _originalScale;
             
             if (_agent != null && _agent.isActiveAndEnabled && _agent.isOnNavMesh)
             {

@@ -11,6 +11,7 @@
     }
   ],
   "dependencies": {
+    "com.cqf.urpvolumetricfog": "https://github.com/CristianQiu/Unity-URP-Volumetric-Light.git",
     "com.cysharp.r3": "1.2.9",
     "com.dbrizov.naughtyattributes": "2.1.4",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
